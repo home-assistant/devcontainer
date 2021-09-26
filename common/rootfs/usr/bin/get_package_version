@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+package="$1"
+jq -r  --arg package "$package" '.[$package]' /tmp/common/install/versions.json

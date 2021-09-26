@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+for script in \
+    common_install_packages \
+    get_package_version \
+    ; do
+    if [ -f "/usr/bin/${script}" ]; then
+        chmod +x "/usr/bin/${script}"
+    fi
+done
+

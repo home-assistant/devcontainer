@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+
+packages="${@}"
+
+for package in ${packages}; do
+    echo "Installing ${package}";
+    bash "/tmp/common/install/${package}";
+done
+
+rm -rf /tmp/common

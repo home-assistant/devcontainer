@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+rm /etc/machine-id
+dbus-uuidgen --ensure=/etc/machine-id
+
+service docker start
+
+chmod +x /usr/bin/ha
+chmod +x /usr/bin/supervisor_run
