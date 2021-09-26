@@ -29,11 +29,11 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🛠️ Build ${{ matrix.devcontainer }}
+      - name: 🛠️ Build devcontainer (${{ matrix.devcontainer }})
         run: |
           docker build . -f ./${{ matrix.devcontainer }}/Dockerfile -t ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}
 
-      - name: 🛠️ Publish ${{ matrix.devcontainer }}
+      - name: 📤 Publish devcontainer (${{ matrix.devcontainer }})
         if: github.event_name == 'push'
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}
