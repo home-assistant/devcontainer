@@ -4,3 +4,4 @@ set -e
 
 bash /usr/bin/supervisor_bootstrap
 
+exit 0
