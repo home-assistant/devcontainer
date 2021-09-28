@@ -10,12 +10,12 @@ start_docker
 trap "stop_docker" ERR
 
 function build_supervisor() {
-    docker pull homeassistant/amd64-builder:dev
+    docker pull ghcr.io/home-assistant/amd64-builder:dev
     docker run --rm \
         --privileged \
         -v /run/docker.sock:/run/docker.sock \
         -v "$(pwd):/data" \
-        homeassistant/amd64-builder:dev \
+        ghcr.io/home-assistant/amd64-builder:dev \
             --generic latest \
             --target /data \
             --test \
