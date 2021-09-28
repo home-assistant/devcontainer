@@ -15,6 +15,19 @@ Usefull for:
 **Example configuration (for `.devcontainer/devcontainer.json`)**| [./addons/devcontainer.json](./addons/devcontainer.json)
 **Example tasks file (for `.vscode/tasks.json`)**| [./addons/tasks.json](./addons/tasks.json)
 
+***
+
+## supervisor
+
+This devcontainer contains all you need to develop the supervisor.
+
+Usefull for:
+  - Supervisor development
+
+**Image** | `ghcr.io/home-assistant/devcontainer:supervisor`
+--|--
+**Dockerfile**| [./supervisor/Dockerfile](./supervisor/Dockerfile)
+
 Notes:
 
 - Use the command `supervisor_run` to start Home Assistant inide the decontainer, or run the task "Start Home Assistant" if you copied the tasks file.

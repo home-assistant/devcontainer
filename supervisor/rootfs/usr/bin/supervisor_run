@@ -1,0 +1,69 @@
+#!/bin/bash
+
+set -e
+
+source /etc/supervisor_scripts/common
+
+echo "Run Supervisor"
+
+start_docker
+trap "stop_docker" ERR
+
+function build_supervisor() {
+    docker pull homeassistant/amd64-builder:dev
+    docker run --rm \
+        --privileged \
+        -v /run/docker.sock:/run/docker.sock \
+        -v "$(pwd):/data" \
+        homeassistant/amd64-builder:dev \
+            --generic latest \
+            --target /data \
+            --test \
+            --amd64 \
+            --no-cache
+}
+
+function run_supervisor() {
+    mkdir -p /workspaces/test_supervisor
+
+    echo "Start Supervisor"
+    docker run --rm --privileged \
+        --name hassio_supervisor \
+        --privileged \
+        --security-opt seccomp=unconfined \
+        --security-opt apparmor:unconfined \
+        -v /run/docker.sock:/run/docker.sock:rw \
+        -v /run/dbus:/run/dbus:ro \
+        -v /run/udev:/run/udev:ro \
+        -v "/workspaces/test_supervisor":/data:rw \
+        -v /etc/machine-id:/etc/machine-id:ro \
+        -v /workspaces/supervisor:/usr/src/supervisor \
+        -e SUPERVISOR_SHARE="/workspaces/test_supervisor" \
+        -e SUPERVISOR_NAME=hassio_supervisor \
+        -e SUPERVISOR_DEV=1 \
+        -e SUPERVISOR_MACHINE="qemux86-64" \
+        homeassistant/amd64-hassio-supervisor:latest
+
+}
+
+
+if [ "$( docker container inspect -f '{{.State.Status}}' hassio_supervisor )" == "running" ]; then
+    echo "Restarting Supervisor"
+    docker rm -f hassio_supervisor
+    init_dbus
+    init_udev
+    cleanup_lastboot
+    run_supervisor
+    stop_docker
+
+else
+    echo "Starting Supervisor"
+    docker system prune -f
+    build_supervisor
+    cleanup_lastboot
+    cleanup_docker
+    init_dbus
+    init_udev
+    run_supervisor
+    stop_docker
+fi

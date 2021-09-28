@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+NVM_VERSION=$(get_package_version nvm)
+
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+
+apt-get update
+apt-get install -y --no-install-recommends \
+    curl \
+    git \
+    apt-utils \
+    apt-transport-https
+
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+apt-get update
+apt-get install -y --no-install-recommends \
+    nodejs \
+    yarn
+
+curl -o - "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash 
+rm -rf /var/lib/apt/lists/*

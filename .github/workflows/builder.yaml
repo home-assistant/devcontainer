@@ -16,6 +16,7 @@ jobs:
       matrix:
         devcontainer:
           - "addons"
+          - "supervisor"
 
     steps:
       - name: 📥 Checkout the repository
