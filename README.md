@@ -5,10 +5,10 @@ This project contains custom devcontainers for use in our repositories.
 
 ## Images
 
-Image | Description
--- | --
-`ghcr.io/home-assistant/devcontainer:addons` | For Add-on development
-`ghcr.io/home-assistant/devcontainer:supervisor` | For Supervisor development
+Image | Description | Dockerfile
+-- | -- | -- 
+`ghcr.io/home-assistant/devcontainer:addons` | For Add-on development | [./addons/Dockerfile](./addons/Dockerfile)
+`ghcr.io/home-assistant/devcontainer:supervisor` | For Supervisor development | [./supervisor/Dockerfile](./supervisor/Dockerfile)
 
  
 
