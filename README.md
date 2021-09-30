@@ -2,35 +2,33 @@
 
 This project contains custom devcontainers for use in our repositories.
 
-## addons
 
-This devcontainer contains all you need to develop add-ons.
+## Images
 
-Usefull for:
-  - Add-on development
+Image | Description
+-- | --
+`ghcr.io/home-assistant/devcontainer:addons` | For Add-on development
+`ghcr.io/home-assistant/devcontainer:supervisor` | For Supervisor development
 
-**Image** | `ghcr.io/home-assistant/devcontainer:addons`
---|--
-**Dockerfile**| [./addons/Dockerfile](./addons/Dockerfile)
-**Example configuration (for `.devcontainer/devcontainer.json`)**| [./addons/devcontainer.json](./addons/devcontainer.json)
-**Example tasks file (for `.vscode/tasks.json`)**| [./addons/tasks.json](./addons/tasks.json)
+ 
 
-***
+## Example files
 
-## supervisor
+Example files to use with Visual Studio Code 
 
-This devcontainer contains all you need to develop the supervisor.
+### addon
 
-Usefull for:
-  - Supervisor development
+Example files for the `addons` devcontainer
 
-**Image** | `ghcr.io/home-assistant/devcontainer:supervisor`
---|--
-**Dockerfile**| [./supervisor/Dockerfile](./supervisor/Dockerfile)
+- [Example configuration (for `.devcontainer/devcontainer.json`)](./addons/devcontainer.json)
+- [Example tasks file (for `.vscode/tasks.json`)](./addons/tasks.json)
 
-Notes:
+
+
+## Notes
+
+### `addons` and `supervisor`
 
 - Use the command `supervisor_run` to start Home Assistant inide the decontainer, or run the task "Start Home Assistant" if you copied the tasks file.
 - Use `ha` to use the custom Home Assistant CLI (Needs the supervisor to be running).
 
-***
