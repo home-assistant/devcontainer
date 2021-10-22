@@ -52,6 +52,7 @@ if [ "$( docker container inspect -f '{{.State.Status}}' hassio_supervisor )" ==
     docker rm -f hassio_supervisor
     init_dbus
     init_udev
+    init_os_agent
     cleanup_lastboot
     run_supervisor
     stop_docker
@@ -64,6 +65,7 @@ else
     cleanup_docker
     init_dbus
     init_udev
+    init_os_agent
     run_supervisor
     stop_docker
 fi
