@@ -148,3 +148,14 @@ function init_udev() {
     sleep 3
     udevadm trigger && udevadm settle
 }
+
+
+function init_os_agent() {
+    if pgrep os-agent; then
+        echo "os-agent is running"
+        return 0
+    fi
+
+    /usr/sbin/os-agent &
+}
+
