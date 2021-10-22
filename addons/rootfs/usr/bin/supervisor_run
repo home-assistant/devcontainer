@@ -46,6 +46,7 @@ else
     cleanup_docker
     init_dbus
     init_udev
+    init_os_agent
     run_supervisor
     stop_docker
 fi
