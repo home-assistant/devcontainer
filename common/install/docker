@@ -3,7 +3,7 @@
 set -e
 
 mkdir -p /etc/docker
-echo '{"storage-driver": "vfs"}' > /etc/docker/daemon.json
+echo '{"storage-driver": "overlay2"}' > /etc/docker/daemon.json
 
 apt-get update
 apt-get install -y --no-install-recommends \
