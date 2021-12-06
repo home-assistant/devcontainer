@@ -18,7 +18,12 @@ function start_docker() {
     fi
 
     echo "Starting docker."
-    dockerd 2> /dev/null &
+    if stat -f -c %T /var/lib/docker | grep -q overlayfs; then
+        echo "Using \"vfs\" storage driver. Bind mount /var/lib/docker to use the faster overlay2 driver."
+        dockerd --storage-driver=vfs 2> /dev/null &
+    else
+        dockerd --storage-driver=overlay2 2> /dev/null &
+    fi
     DOCKER_PID=$!
 
     echo "Waiting for docker to initialize..."
