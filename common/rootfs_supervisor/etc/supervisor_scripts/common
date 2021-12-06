@@ -17,6 +17,12 @@ function start_docker() {
         update-alternatives --set ip6tables /usr/sbin/iptables-legacy || echo "Fails adjust ip6tables"
     fi
 
+    if stat -f -c %T /var/lib/docker | grep -q overlayfs; then
+        echo "Docker storage directory /var/lib/docker is an overlayfs. The location needs"
+	echo "to be a bind mount (e.g. using a volume) to support the overlay2 backend."
+	exit 1
+    fi
+
     echo "Starting docker."
     dockerd 2> /dev/null &
     DOCKER_PID=$!
