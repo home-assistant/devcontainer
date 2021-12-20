@@ -29,6 +29,6 @@ Example files for the `addons` devcontainer
 
 ### `addons` and `supervisor`
 
-- Use the command `supervisor_run` to start Home Assistant inide the decontainer, or run the task "Start Home Assistant" if you copied the tasks file.
+- Use the command `supervisor_run` to start Home Assistant inside the decontainer, or run the task "Start Home Assistant" if you copied the tasks file.
 - Use `ha` to use the custom Home Assistant CLI (Needs the supervisor to be running).
 
