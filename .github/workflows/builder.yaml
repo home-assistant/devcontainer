@@ -24,7 +24,7 @@ jobs:
 
       - name: 🔓 Registry login
         if: github.event_name == 'push'
-        uses: docker/login-action@v1.10.0
+        uses: docker/login-action@v1.12.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
