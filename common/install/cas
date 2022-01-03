@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+apt-get update
+apt-get install -y --no-install-recommends \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common \
+    gpg-agent
+
+apt-key adv --fetch-keys https://packages.codenotary.org/packages.codenotary.org.gpp.key
+add-apt-repository "deb https://packages.codenotary.org/debian/ stable main"
+
+apt-get update 
+apt-get install -y --no-install-recommends \
+    cas \
+
+rm -rf /var/lib/apt/lists/*

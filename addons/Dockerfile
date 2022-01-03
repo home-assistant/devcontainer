@@ -25,7 +25,7 @@ RUN \
     && common_install_packages \
         docker \
         shellcheck \
-        vcn \
+        cas \
         os-agent
 
 COPY ./addons/rootfs /
