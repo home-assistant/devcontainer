@@ -5,10 +5,10 @@ set -e
 rm /etc/machine-id
 dbus-uuidgen --ensure=/etc/machine-id
 
-if grep -q 'microsoft-standard|standard-WSL' /proc/version; then
+if grep -q 'microsoft-standard\|standard-WSL' /proc/version; then
     # The docker daemon does not start when running WSL2 without adjusting iptables
     update-alternatives --set iptables /usr/sbin/iptables-legacy || echo "Fails adjust iptables"
-    update-alternatives --set ip6tables /usr/sbin/iptables-legacy || echo "Fails adjust ip6tables"
+    update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy || echo "Fails adjust ip6tables"
 fi
 
 service docker start
