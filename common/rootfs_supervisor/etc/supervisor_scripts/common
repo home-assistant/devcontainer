@@ -161,6 +161,6 @@ function init_os_agent() {
         return 0
     fi
 
-    /usr/sbin/os-agent &
+    os-agent &
 }
 
