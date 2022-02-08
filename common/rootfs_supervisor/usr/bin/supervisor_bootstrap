@@ -11,7 +11,5 @@ if grep -q 'microsoft-standard\|standard-WSL' /proc/version; then
     update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy || echo "Fails adjust ip6tables"
 fi
 
-service docker start
-
 chmod +x /usr/bin/ha
 chmod +x /usr/bin/supervisor_run
