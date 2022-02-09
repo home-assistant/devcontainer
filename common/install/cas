@@ -18,5 +18,3 @@ apt-get install -y --no-install-recommends \
     cas \
 
 rm -rf /var/lib/apt/lists/*
-
-chmod 755 /root/.cas-trusted-signing-pub-key
