@@ -8,7 +8,7 @@ case $(arch) in
     aarch64|arm64)
     ARCH="arm64";;
     *)
-    echo "Unsupported runner OS, aborting CAS Download"  && exit 1;;
+    echo "Unsupported runner OS, aborting CAS installation"  && exit 1;;
 esac
 
 CAS_VERSION=$(get_package_version cas)
