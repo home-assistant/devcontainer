@@ -13,9 +13,9 @@ esac
 
 CAS_VERSION=$(get_package_version cas)
 
-curl -v \
-"https://github.com/codenotary/cas/releases/download/v1.0.2/cas-v${CAS_VERSION}-linux-${ARCH}" \
---output ./cas
+curl -fLs \
+    "https://github.com/codenotary/cas/releases/download/v1.0.2/cas-v${CAS_VERSION}-linux-${ARCH}" \
+    --output ./cas
 
 mv -f "./cas" "/usr/local/bin/cas"
 rm -f "./cas"
