@@ -4,7 +4,7 @@ set -e
 
 export SUPERVISOR_VERSION="$(curl -s https://version.home-assistant.io/dev.json | jq -e -r '.supervisor')"
 HA_ARCH=$(get_arch ha)
-QEMU_ARCH=$(get_arch)
+QEMU_ARCH=$(get_arch qemu)
 DOCKER_TIMEOUT=30
 DOCKER_PID=0
 

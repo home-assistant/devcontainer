@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/vscode/devcontainers/python:0-3.9-bullseye
+FROM mcr.microsoft.com/vscode/devcontainers/python:0-3.9
 
 ENV \
     DEBIAN_FRONTEND=noninteractive \

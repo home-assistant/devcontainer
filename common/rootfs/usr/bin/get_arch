@@ -6,7 +6,7 @@ mode=${1:-unix}
 case $(arch) in
     x86_64|amd64)
       case $mode in
-      unix)
+      unix|qemu)
         echo "x86_64";;
       docker|ha)
         echo "amd64";;
@@ -18,6 +18,8 @@ case $(arch) in
         echo "aarch64";;
       docker)
         echo "arm64";;
+      qemu)
+        echo "arm-64";;
       esac
     ;;
 esac
