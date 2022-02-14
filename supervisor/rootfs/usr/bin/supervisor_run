@@ -2,9 +2,6 @@
 
 set -e
 
-HA_ARCH=$(get_arch ha)
-QEMU_ARCH=$(get_arch)
-
 source /etc/supervisor_scripts/common
 
 echo "Run Supervisor"
