@@ -29,7 +29,7 @@ jobs:
         uses: docker/setup-buildx-action@v1
 
       - name: 🔓 Registry login
-        #if: github.event_name == 'push'
+        if: github.event_name == 'push'
         uses: docker/login-action@v1.12.0
         with:
           registry: ghcr.io
@@ -42,5 +42,5 @@ jobs:
           context: .
           file: ./${{ matrix.devcontainer }}/Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: true #${{ github.event_name == 'push' }}
+          push: ${{ github.event_name == 'push' }}
           tags: ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}
