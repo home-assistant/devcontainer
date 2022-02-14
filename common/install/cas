@@ -2,14 +2,7 @@
 
 set -e
 
-case $(arch) in
-    x86_64|amd64)
-    ARCH="amd64";;
-    aarch64|arm64)
-    ARCH="arm64";;
-    *)
-    echo "Unsupported runner OS, aborting CAS installation"  && exit 1;;
-esac
+ARCH=$(get_arch docker)
 
 CAS_VERSION=$(get_package_version cas)
 

@@ -2,7 +2,7 @@
 
 set -e
 
-ARCH=$(arch)
+ARCH=$(get_arch)
 OS_AGENT_VERSION=$(get_package_version os-agent)
 
 apt update

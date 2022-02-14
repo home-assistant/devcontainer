@@ -2,7 +2,7 @@
 
 set -e
 
-ARCH=$(arch)
+ARCH=$(get_arch)
 
 curl -fLs \
     "https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.${ARCH}.tar.xz" \
