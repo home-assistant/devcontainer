@@ -78,13 +78,13 @@ function cleanup_lastboot() {
 }
 
 function build_supervisor() {
-    docker pull "homeassistant/$(HA_ARCH)-builder:dev"
+    docker pull "homeassistant/${HA_ARCH}-builder:dev"
 
     docker run --rm \
         --privileged \
         -v /run/docker.sock:/run/docker.sock \
         -v "$(pwd):/data" \
-        "homeassistant/$(HA_ARCH)-builder:dev" \
+        "homeassistant/${HA_ARCH}-builder:dev" \
             --generic latest \
             --target /data \
             --test \
