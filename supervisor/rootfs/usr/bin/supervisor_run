@@ -19,7 +19,7 @@ function build_supervisor() {
             --generic latest \
             --target /data \
             --test \
-            --amd64 \
+            "--${HA_ARCH}" \
             --no-cache
 }
 
