@@ -10,16 +10,16 @@ start_docker
 trap "stop_docker" ERR
 
 function build_supervisor() {
-    docker pull ghcr.io/home-assistant/amd64-builder:dev
+    docker pull "ghcr.io/home-assistant/${HA_ARCH}-builder:dev"
     docker run --rm \
         --privileged \
         -v /run/docker.sock:/run/docker.sock \
         -v "$(pwd):/data" \
-        ghcr.io/home-assistant/amd64-builder:dev \
+        "ghcr.io/home-assistant/${HA_ARCH}-builder:dev" \
             --generic latest \
             --target /data \
             --test \
-            --amd64 \
+            "--${HA_ARCH}" \
             --no-cache
 }
 
@@ -42,8 +42,8 @@ function run_supervisor() {
         -e SUPERVISOR_SHARE="/workspaces/test_supervisor" \
         -e SUPERVISOR_NAME=hassio_supervisor \
         -e SUPERVISOR_DEV=1 \
-        -e SUPERVISOR_MACHINE="qemux86-64" \
-        homeassistant/amd64-hassio-supervisor:latest
+        -e SUPERVISOR_MACHINE="qemu${QEMU_ARCH}" \
+        "homeassistant/${HA_ARCH}-hassio-supervisor:latest"
 
 }
 

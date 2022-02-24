@@ -2,8 +2,10 @@
 
 set -e
 
+ARCH=$(get_arch)
+
 curl -fLs \
-    "https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz" \
+    "https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.${ARCH}.tar.xz" \
     | tar -xJ
 
 mv -f "./shellcheck-stable/shellcheck" "/usr/bin/shellcheck"

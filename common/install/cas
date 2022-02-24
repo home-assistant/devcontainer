@@ -2,19 +2,13 @@
 
 set -e
 
-apt-get update
-apt-get install -y --no-install-recommends \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    software-properties-common \
-    gpg-agent
+ARCH=$(get_arch docker)
 
-apt-key adv --fetch-keys https://packages.codenotary.org/packages.codenotary.org.gpp.key
-add-apt-repository "deb https://packages.codenotary.org/debian/ stable main"
+CAS_VERSION=$(get_package_version cas)
 
-apt-get update 
-apt-get install -y --no-install-recommends \
-    cas \
+curl -fLs \
+    "https://github.com/codenotary/cas/releases/download/${CAS_VERSION}/cas-${CAS_VERSION}-linux-${ARCH}" \
+    --output ./cas
 
-rm -rf /var/lib/apt/lists/*
+mv -f "./cas" "/usr/local/bin/cas"
+rm -f "./cas"

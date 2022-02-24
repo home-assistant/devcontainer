@@ -2,7 +2,9 @@
 
 set -e
 
-export SUPERVISOR_VERSON="$(curl -s https://version.home-assistant.io/dev.json | jq -e -r '.supervisor')"
+export SUPERVISOR_VERSION="$(curl -s https://version.home-assistant.io/dev.json | jq -e -r '.supervisor')"
+HA_ARCH=$(get_arch ha)
+QEMU_ARCH=$(get_arch qemu)
 DOCKER_TIMEOUT=30
 DOCKER_PID=0
 
@@ -76,13 +78,13 @@ function cleanup_lastboot() {
 }
 
 function build_supervisor() {
-    docker pull homeassistant/amd64-builder:dev
+    docker pull "homeassistant/${HA_ARCH}-builder:dev"
 
     docker run --rm \
         --privileged \
         -v /run/docker.sock:/run/docker.sock \
         -v "$(pwd):/data" \
-        homeassistant/amd64-builder:dev \
+        "homeassistant/${HA_ARCH}-builder:dev" \
             --generic latest \
             --target /data \
             --test \
@@ -114,8 +116,8 @@ function run_supervisor() {
         -e SUPERVISOR_SHARE="/workspaces/test_supervisor" \
         -e SUPERVISOR_NAME="hassio_supervisor" \
         -e SUPERVISOR_DEV=1 \
-        -e SUPERVISOR_MACHINE="qemux86-64" \
-        homeassistant/amd64-hassio-supervisor:latest
+        -e SUPERVISOR_MACHINE="qemu${QEMU_ARCH}" \
+        "homeassistant/${HA_ARCH}-hassio-supervisor:latest"
 }
 
 function init_dbus() {

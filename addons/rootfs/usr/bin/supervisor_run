@@ -25,8 +25,8 @@ function run_supervisor() {
         -e SUPERVISOR_SHARE="/tmp/supervisor_data" \
         -e SUPERVISOR_NAME=hassio_supervisor \
         -e SUPERVISOR_DEV=1 \
-        -e SUPERVISOR_MACHINE="qemux86-64" \
-        "homeassistant/amd64-hassio-supervisor:${SUPERVISOR_VERSON}"
+        -e SUPERVISOR_MACHINE="qemu${QEMU_ARCH}" \
+        "homeassistant/${HA_ARCH}-hassio-supervisor:${SUPERVISOR_VERSION}"
 }
 
 

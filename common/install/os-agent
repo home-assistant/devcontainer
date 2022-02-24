@@ -2,13 +2,14 @@
 
 set -e
 
+ARCH=$(get_arch)
 OS_AGENT_VERSION=$(get_package_version os-agent)
 
 apt update
 apt install -y udisks2
 
 curl -Lso ./os-agent.deb \
-    "https://github.com/home-assistant/os-agent/releases/download/${OS_AGENT_VERSION}/os-agent_${OS_AGENT_VERSION}_linux_x86_64.deb"
+    "https://github.com/home-assistant/os-agent/releases/download/${OS_AGENT_VERSION}/os-agent_${OS_AGENT_VERSION}_linux_${ARCH}.deb"
 
 dpkg -i ./os-agent.deb
 rm ./os-agent.deb

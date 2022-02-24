@@ -10,4 +10,3 @@ for script in \
         chmod +x "/usr/bin/${script}"
     fi
 done
-
