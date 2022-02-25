@@ -39,6 +39,7 @@ jobs:
       - name: 🛠️ Build devcontainer (${{ matrix.devcontainer }})
         uses: docker/build-push-action@v2
         with:
+          load: true
           context: .
           file: ./${{ matrix.devcontainer }}/Dockerfile
           platforms: linux/amd64,linux/arm64
