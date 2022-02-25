@@ -17,9 +17,6 @@ jobs:
         devcontainer:
           - "addons"
           - "supervisor"
-        platform:
-          - "linux/amd64"
-          - "linux/arm64"
 
     steps:
       - name: 📥 Checkout the repository
@@ -39,16 +36,12 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🛠️ Build devcontainer (${{ matrix.devcontainer }}, ${{ matrix.platform }})
+      - name: 🛠️ Build devcontainer (${{ matrix.devcontainer }})
         uses: docker/build-push-action@v2
         with:
-          load: true
           context: .
           file: ./${{ matrix.devcontainer }}/Dockerfile
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           tags: ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}
+          push: ${{ github.event_name == 'push' }} 
 
-      - name: 📤 Publish devcontainer (${{ matrix.devcontainer }}, ${{ matrix.platform }})
-        if: github.event_name == 'push'
-        run: |
-          docker push ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}
