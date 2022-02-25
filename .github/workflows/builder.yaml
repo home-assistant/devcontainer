@@ -43,8 +43,5 @@ jobs:
           file: ./${{ matrix.devcontainer }}/Dockerfile
           platforms: linux/amd64,linux/arm64
           tags: ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}
+          push: ${{ github.event_name == 'push' }} 
 
-      - name: 📤 Publish devcontainer (${{ matrix.devcontainer }})
-        if: github.event_name == 'push'
-        run: |
-          docker push ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}
