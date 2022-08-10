@@ -10,5 +10,6 @@ curl -fLs \
     "https://github.com/codenotary/cas/releases/download/${CAS_VERSION}/cas-${CAS_VERSION}-linux-${ARCH}" \
     --output ./cas
 
+chmod +x ./cas
 mv -f "./cas" "/usr/local/bin/cas"
 rm -f "./cas"
