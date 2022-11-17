@@ -30,4 +30,6 @@ RUN \
         os-agent \
         yarn
 
+RUN usermod -aG docker vscode
+
 COPY ./supervisor/rootfs /

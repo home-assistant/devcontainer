@@ -15,16 +15,16 @@ function start_docker() {
 
     if grep -q 'microsoft-standard\|standard-WSL' /proc/version; then
         # The docker daemon does not start when running WSL2 without adjusting iptables
-        update-alternatives --set iptables /usr/sbin/iptables-legacy || echo "Fails adjust iptables"
-        update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy || echo "Fails adjust ip6tables"
+        sudo update-alternatives --set iptables /usr/sbin/iptables-legacy || echo "Fails adjust iptables"
+        sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy || echo "Fails adjust ip6tables"
     fi
 
     echo "Starting docker."
     if stat -f -c %T /var/lib/docker | grep -q overlayfs; then
         echo "Using \"vfs\" storage driver. Bind mount /var/lib/docker to use the faster overlay2 driver."
-        dockerd --storage-driver=vfs 2> /dev/null &
+        sudo dockerd --storage-driver=vfs 2> /dev/null &
     else
-        dockerd --storage-driver=overlay2 2> /dev/null &
+        sudo dockerd --storage-driver=overlay2 2> /dev/null &
     fi
     DOCKER_PID=$!
 
@@ -53,7 +53,7 @@ function stop_docker() {
         endtime="$(date +%s)"
 
         # Now wait for it to die
-        kill "$DOCKER_PID"
+        sudo kill "$DOCKER_PID"
         while kill -0 "$DOCKER_PID" 2> /dev/null; do
             if [[ $((endtime - starttime)) -le $DOCKER_TIMEOUT ]]; then
                 sleep 1
@@ -71,9 +71,8 @@ function stop_docker() {
 function cleanup_lastboot() {
     if [[ -f /workspaces/test_supervisor/config.json ]]; then
         echo "Cleaning up last boot"
-        cp /workspaces/test_supervisor/config.json /tmp/config.json
-        jq -rM 'del(.last_boot)' /tmp/config.json > /workspaces/test_supervisor/config.json
-        rm /tmp/config.json
+        sudo jq -rM 'del(.last_boot)' /workspaces/test_supervisor/config.json > /tmp/config.json
+        sudo mv /tmp/config.json /workspaces/test_supervisor/config.json
     fi
 }
 
@@ -98,8 +97,8 @@ function cleanup_docker() {
 }
 
 function run_supervisor() {
-    mkdir -p /tmp/supervisor_data
-    mkdir -p /workspaces/test_supervisor
+    sudo mkdir -p /tmp/supervisor_data
+    sudo mkdir -p /workspaces/test_supervisor
 
     echo "Start Supervisor"
     docker run --rm --privileged \
@@ -127,15 +126,15 @@ function init_dbus() {
     fi
 
     echo "Startup dbus"
-    mkdir -p /var/lib/dbus
-    cp -f /etc/machine-id /var/lib/dbus/machine-id
+    sudo mkdir -p /var/lib/dbus
+    sudo cp -f /etc/machine-id /var/lib/dbus/machine-id
 
     # cleanups
-    mkdir -p /run/dbus
-    rm -f /run/dbus/pid
+    sudo mkdir -p /run/dbus
+    sudo rm -f /run/dbus/pid
 
     # run
-    dbus-daemon --system --print-address
+    sudo dbus-daemon --system --print-address
 }
 
 
@@ -148,12 +147,12 @@ function init_udev() {
     echo "Startup udev"
 
     # cleanups
-    mkdir -p /run/udev
+    sudo mkdir -p /run/udev
 
     # run
-    /lib/systemd/systemd-udevd --daemon
+    sudo /lib/systemd/systemd-udevd --daemon
     sleep 3
-    udevadm trigger && udevadm settle
+    sudo udevadm trigger && sudo udevadm settle
 }
 
 
@@ -163,6 +162,6 @@ function init_os_agent() {
         return 0
     fi
 
-    os-agent &
+    sudo os-agent &
 }
 
