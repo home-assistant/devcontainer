@@ -30,4 +30,6 @@ RUN \
         os-agent \
         yarn
 
+VOLUME /var/lib/docker
+
 COPY ./supervisor/rootfs /

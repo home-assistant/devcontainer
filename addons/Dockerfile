@@ -28,4 +28,6 @@ RUN \
         cas \
         os-agent
 
+VOLUME /var/lib/docker
+
 COPY ./addons/rootfs /
