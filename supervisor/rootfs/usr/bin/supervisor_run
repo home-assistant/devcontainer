@@ -24,7 +24,7 @@ function build_supervisor() {
 }
 
 function run_supervisor() {
-    mkdir -p /workspaces/test_supervisor
+    sudo mkdir -p /workspaces/test_supervisor
 
     echo "Start Supervisor"
     docker run --rm --privileged \
