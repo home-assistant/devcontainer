@@ -28,4 +28,6 @@ RUN \
         cas \
         os-agent
 
+RUN usermod -aG docker vscode
+
 COPY ./addons/rootfs /
