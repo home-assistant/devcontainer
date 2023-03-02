@@ -26,8 +26,7 @@ RUN \
         docker \
         shellcheck \
         cas \
-        os-agent
-
-RUN usermod -aG docker vscode
+        os-agent \
+    && usermod -aG docker vscode
 
 COPY ./addons/rootfs /
