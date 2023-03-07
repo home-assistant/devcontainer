@@ -12,6 +12,7 @@ RUN \
     apt-get update \
     && apt-get install -y --no-install-recommends \
         dbus \
+        dbus-x11 \
         network-manager \
         libpulse0 \
         xz-utils
