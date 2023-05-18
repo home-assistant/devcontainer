@@ -7,6 +7,7 @@ HA_ARCH=$(get_arch ha)
 QEMU_ARCH=$(get_arch qemu)
 DOCKER_TIMEOUT=30
 DOCKER_PID=0
+WD="${WORKSPACE_DIRECTORY:=/workspaces/supervisor}"
 
 
 function start_docker() {
@@ -111,7 +112,7 @@ function run_supervisor() {
         -v /run/udev:/run/udev:ro \
         -v "/workspaces/test_supervisor":/data:rw \
         -v /etc/machine-id:/etc/machine-id:ro \
-        -v /workspaces/supervisor:/usr/src/supervisor \
+        -v "${WD}:/usr/src/supervisor" \
         -e SUPERVISOR_SHARE="/workspaces/test_supervisor" \
         -e SUPERVISOR_NAME="hassio_supervisor" \
         -e SUPERVISOR_DEV=1 \
