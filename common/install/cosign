@@ -11,5 +11,5 @@ curl -fLs \
     --output ./cosign
 
 chmod +x ./cosign
-mv -f "./cosign" "/usr/local/bin/cosign"
-rm -f "./cosign"
+mv -f ./cosign /usr/local/bin/cosign
+rm -f ./cosign
