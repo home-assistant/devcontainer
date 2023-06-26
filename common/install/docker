@@ -12,7 +12,7 @@ apt-get install -y --no-install-recommends \
 
 curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 
-add-apt-repository "deb https://download.docker.com/linux/debian $(. /etc/os-release && echo $VERSION_CODENAME) stable"
+add-apt-repository "deb https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable"
 
 apt-get update 
 apt-get install -y --no-install-recommends \
