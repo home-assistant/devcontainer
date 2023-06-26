@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+ARCH=$(get_arch docker)
+
+COSIGN_VERSION=$(get_package_version cosign)
+
+curl -fLs \
+    "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${ARCH}" \
+    --output ./cosign
+
+chmod +x ./cosign
+mv -f ./cosign /usr/local/bin/cosign
+rm -f ./cosign

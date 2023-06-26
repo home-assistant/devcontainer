@@ -25,7 +25,7 @@ RUN \
     && common_install_packages \
         docker \
         shellcheck \
-        cas \
+        cosign \
         os-agent \
     && usermod -aG docker vscode
 
