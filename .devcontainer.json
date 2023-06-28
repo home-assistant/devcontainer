@@ -1,0 +1,4 @@
+{
+	"name": "home-assistant/devcontainer",
+	"image": "mcr.microsoft.com/devcontainers/base:bookworm"
+}
