@@ -2,12 +2,15 @@
 
 set -e
 
-export SUPERVISOR_VERSION="$(curl -s https://version.home-assistant.io/dev.json | jq -e -r '.supervisor')"
+VERSION_INFO=$(curl -s https://version.home-assistant.io/dev.json)
 HA_ARCH=$(get_arch ha)
 QEMU_ARCH=$(get_arch qemu)
 DOCKER_TIMEOUT=30
 DOCKER_PID=0
 WD="${WORKSPACE_DIRECTORY:=/workspaces/supervisor}"
+
+export SUPERVISOR_VERSION="$(echo ${VERSION_INFO} | jq -e -r '.supervisor')"
+export SUPERVISOR_IMAGE="$(sed "s/{arch}/${HA_ARCH}/g" <<< "$(echo ${VERSION_INFO} | jq -e -r '.images.supervisor')")"
 
 
 function start_docker() {
@@ -78,13 +81,13 @@ function cleanup_lastboot() {
 }
 
 function build_supervisor() {
-    docker pull "homeassistant/${HA_ARCH}-builder:dev"
+    docker pull "ghcr.io/home-assistant/${HA_ARCH}-builder:dev"
 
     docker run --rm \
         --privileged \
         -v /run/docker.sock:/run/docker.sock \
         -v "$(pwd):/data" \
-        "homeassistant/${HA_ARCH}-builder:dev" \
+        "ghcr.io/home-assistant/${HA_ARCH}-builder:dev" \
             --generic latest \
             --target /data \
             --test \
@@ -117,7 +120,7 @@ function run_supervisor() {
         -e SUPERVISOR_NAME="hassio_supervisor" \
         -e SUPERVISOR_DEV=1 \
         -e SUPERVISOR_MACHINE="qemu${QEMU_ARCH}" \
-        "homeassistant/${HA_ARCH}-hassio-supervisor:latest"
+        "${SUPERVISOR_IMAGE}:latest"
 }
 
 function init_dbus() {

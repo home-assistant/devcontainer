@@ -26,7 +26,7 @@ function run_supervisor() {
         -e SUPERVISOR_NAME=hassio_supervisor \
         -e SUPERVISOR_DEV=1 \
         -e SUPERVISOR_MACHINE="qemu${QEMU_ARCH}" \
-        "homeassistant/${HA_ARCH}-hassio-supervisor:${SUPERVISOR_VERSION}"
+        "${SUPERVISOR_IMAGE}:${SUPERVISOR_VERSION}"
 }
 
 
