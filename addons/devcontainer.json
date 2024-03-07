@@ -8,21 +8,21 @@
     "WORKSPACE_DIRECTORY": "${containerWorkspaceFolder}"
   },
   "customizations": {
-      "vscode": {
-          "extensions": ["timonwong.shellcheck", "esbenp.prettier-vscode"],
-          "settings": {
-              "terminal.integrated.profiles.linux": {
-                "zsh": {
-                  "path": "/usr/bin/zsh"
-                }
-              },
-              "terminal.integrated.defaultProfile.linux": "zsh",
-              "editor.formatOnPaste": false,
-              "editor.formatOnSave": true,
-              "editor.formatOnType": true,
-              "files.trimTrailingWhitespace": true
-            }
+    "vscode": {
+      "extensions": ["timonwong.shellcheck", "esbenp.prettier-vscode"],
+      "settings": {
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/usr/bin/zsh"
+          }
+        },
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.formatOnPaste": false,
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "files.trimTrailingWhitespace": true
       }
+    }
   },
   "mounts": [ "type=volume,target=/var/lib/docker" ]
 }
