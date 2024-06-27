@@ -3,7 +3,8 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12
 ENV \
     DEBIAN_FRONTEND=noninteractive \
     DEVCONTAINER=1 \
-    NVM_DIR="/root/.nvm"
+    NVM_DIR="/root/.nvm" \
+    UV_SYSTEM_PYTHON=true
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -23,7 +24,8 @@ COPY ./common/install /tmp/common/install
 
 # Install common
 RUN \
-    bash devcontainer_init \
+    pip3 install --no-cache-dir uv==0.2.15 \
+    && bash devcontainer_init \
     && common_install_packages \
         docker \
         shellcheck \
