@@ -2,13 +2,6 @@
 
 set -e
 
-bash /usr/bin/supervisor_bootstrap
-
 uv pip install -U setuptools
 uv pip install -r requirements.txt -r requirements_tests.txt
 uv pip install tox
-
-git config --global --add safe.directory "${WORKSPACE_DIRECTORY}"
-pre-commit install
-
-exit 0
