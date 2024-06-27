@@ -5,7 +5,7 @@ set -e
 bash /usr/bin/supervisor_bootstrap
 
 uv pip install -U setuptools
-uv pip install --no-build -r requirements.txt -r requirements_tests.txt
+uv pip install -r requirements.txt -r requirements_tests.txt
 uv pip install tox
 
 pre-commit install

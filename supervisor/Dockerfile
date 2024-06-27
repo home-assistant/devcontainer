@@ -3,8 +3,7 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12
 ENV \
     DEBIAN_FRONTEND=noninteractive \
     DEVCONTAINER=1 \
-    NVM_DIR="/root/.nvm" \
-    UV_SYSTEM_PYTHON=true
+    NVM_DIR="/root/.nvm"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -31,8 +30,13 @@ RUN \
         shellcheck \
         cosign \
         os-agent \
-        yarn
-
-RUN usermod -aG docker vscode
+        yarn \
+    && usermod -aG docker vscode
 
 COPY ./supervisor/rootfs /
+
+# Set up venv for UV
+USER vscode
+ENV VIRTUAL_ENV="/home/vscode/.local/ha-venv"
+RUN uv venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
