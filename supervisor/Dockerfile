@@ -23,14 +23,20 @@ COPY ./common/install /tmp/common/install
 
 # Install common
 RUN \
-    bash devcontainer_init \
+    pip3 install --no-cache-dir uv==0.2.15 \
+    && bash devcontainer_init \
     && common_install_packages \
         docker \
         shellcheck \
         cosign \
         os-agent \
-        yarn
-
-RUN usermod -aG docker vscode
+        yarn \
+    && usermod -aG docker vscode
 
 COPY ./supervisor/rootfs /
+
+# Set up venv for UV
+USER vscode
+ENV VIRTUAL_ENV="/home/vscode/.local/ha-venv"
+RUN uv venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
