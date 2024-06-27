@@ -4,9 +4,9 @@ set -e
 
 bash /usr/bin/supervisor_bootstrap
 
-uv pip install -U setuptools
-uv pip install --no-build -r requirements.txt -r requirements_tests.txt
-uv pip install tox
+pip3 install -U setuptools pip
+pip3 install -r requirements.txt -r requirements_tests.txt
+pip3 install tox
 
 pre-commit install
 
