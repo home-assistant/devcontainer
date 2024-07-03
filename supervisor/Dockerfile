@@ -39,4 +39,7 @@ COPY ./supervisor/rootfs /
 USER vscode
 ENV VIRTUAL_ENV="/home/vscode/.local/ha-venv"
 RUN uv venv $VIRTUAL_ENV
+
+# Setting PATH here isn't enough, VSCode rewites it after initial scripts finish
+# Must also be set in remoteEnv in devcontainer.json
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
