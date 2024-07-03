@@ -23,7 +23,7 @@ COPY ./common/install /tmp/common/install
 
 # Install common
 RUN \
-    pip3 install --no-cache-dir uv==0.2.15 \
+    pip3 install --no-cache-dir uv \
     && bash devcontainer_init \
     && common_install_packages \
         docker \
