@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -e
+
+bash /usr/bin/supervisor_bootstrap
+
+if [ ! -n "$VIRTUAL_ENV" ]; then
+  if [ -x "$(command -v uv)" ]; then
+    uv venv venv
+  else
+    python3 -m venv venv
+  fi
+  source venv/bin/activate
+fi
+
+if ! [ -x "$(command -v uv)" ]; then
+  python3 -m pip install uv
+fi
+
+bash /usr/bin/devcontainer_bootstrap
+
+git config --global --add safe.directory "${WORKSPACE_DIRECTORY}"
+pre-commit install
