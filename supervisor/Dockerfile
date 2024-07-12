@@ -23,14 +23,23 @@ COPY ./common/install /tmp/common/install
 
 # Install common
 RUN \
-    bash devcontainer_init \
+    pip3 install --no-cache-dir uv \
+    && bash devcontainer_init \
     && common_install_packages \
         docker \
         shellcheck \
         cosign \
         os-agent \
-        yarn
-
-RUN usermod -aG docker vscode
+        yarn \
+    && usermod -aG docker vscode
 
 COPY ./supervisor/rootfs /
+
+# Set up venv for UV
+USER vscode
+ENV VIRTUAL_ENV="/home/vscode/.local/ha-venv"
+RUN uv venv $VIRTUAL_ENV
+
+# Setting PATH here isn't enough, VSCode rewites it after initial scripts finish
+# Must also be set in remoteEnv in devcontainer.json
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
