@@ -10,7 +10,10 @@ Image | Description | Dockerfile
 `ghcr.io/home-assistant/devcontainer:addons` | For Add-on development | [./addons/Dockerfile](./addons/Dockerfile)
 `ghcr.io/home-assistant/devcontainer:supervisor` | For Supervisor development | [./supervisor/Dockerfile](./supervisor/Dockerfile)
 
- 
+Versioned images are available with the custom devcontainer version prepended (e.g. `1-supervisor`). This loosly resembles what
+upstream devcontainers are providing as well. The version is meant to be incremented when non-backwards compatible changes are
+made. That allows existing devcontainer configuration to work while updating the devcontainers (e.g. when the Supervisor devcontainer
+is updated to a new Python version).
 
 ## Example files
 
