@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/base:debian
+FROM mcr.microsoft.com/devcontainers/base:1-debian
 
 ENV \
     DEBIAN_FRONTEND=noninteractive \
