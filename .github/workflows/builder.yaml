@@ -38,7 +38,9 @@ jobs:
 
       - name: Get version of devcontainer
         id: get-version
-        run: echo "version=$(head -1 ./${{ matrix.devcontainer }}/version)" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(head -1 ./${{ matrix.devcontainer }}/version)" >> $GITHUB_OUTPUT
+          echo "gitsha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: 🛠️ Build devcontainer (${{ matrix.devcontainer }})
         uses: docker/build-push-action@v6.12.0
@@ -49,5 +51,6 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/devcontainer:${{ steps.get-version.outputs.version }}-${{ matrix.devcontainer }}
             ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}
+            ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}-${{ steps.get-version.outputs.gitsha }}
           push: ${{ github.event_name == 'push' }} 
 
