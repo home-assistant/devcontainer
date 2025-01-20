@@ -7,7 +7,7 @@ HA_ARCH=$(get_arch ha)
 QEMU_ARCH=$(get_arch qemu)
 DOCKER_TIMEOUT=30
 DOCKER_PID=0
-WD="${WORKSPACE_DIRECTORY:=/workspaces/supervisor}"
+SUPERVISOR_SHARE="/mnt/supervisor"
 
 export SUPERVISOR_VERSION="$(echo ${VERSION_INFO} | jq -e -r '.supervisor')"
 export SUPERVISOR_IMAGE="$(sed "s/{arch}/${HA_ARCH}/g" <<< "$(echo ${VERSION_INFO} | jq -e -r '.images.supervisor')")"
@@ -73,54 +73,16 @@ function stop_docker() {
 }
 
 function cleanup_lastboot() {
-    if [[ -f /workspaces/test_supervisor/config.json ]]; then
+    if [[ -f /mnt/supervisor/config.json ]]; then
         echo "Cleaning up last boot"
-        sudo jq -rM 'del(.last_boot)' /workspaces/test_supervisor/config.json > /tmp/config.json
-        sudo mv /tmp/config.json /workspaces/test_supervisor/config.json
+        sudo jq -rM 'del(.last_boot)' /mnt/supervisor/config.json > /tmp/config.json
+        sudo mv /tmp/config.json /mnt/supervisor/config.json
     fi
-}
-
-function build_supervisor() {
-    docker pull "ghcr.io/home-assistant/${HA_ARCH}-builder:dev"
-
-    docker run --rm \
-        --privileged \
-        -v /run/docker.sock:/run/docker.sock \
-        -v "$(pwd):/data" \
-        "ghcr.io/home-assistant/${HA_ARCH}-builder:dev" \
-            --generic latest \
-            --target /data \
-            --test \
-            --amd64 \
-            --no-cache
 }
 
 function cleanup_docker() {
     echo "Cleaning up stopped containers..."
     docker rm $(docker ps -a -q) || true
-}
-
-function run_supervisor() {
-    sudo mkdir -p /tmp/supervisor_data
-    sudo mkdir -p /workspaces/test_supervisor
-
-    echo "Start Supervisor"
-    docker run --rm --privileged \
-        --name hassio_supervisor \
-        --privileged \
-        --security-opt seccomp=unconfined \
-        --security-opt apparmor=unconfined \
-        -v /run/docker.sock:/run/docker.sock:rw \
-        -v /run/dbus:/run/dbus:ro \
-        -v /run/udev:/run/udev:ro \
-        -v "/workspaces/test_supervisor":/data:rw \
-        -v /etc/machine-id:/etc/machine-id:ro \
-        -v "${WD}:/usr/src/supervisor" \
-        -e SUPERVISOR_SHARE="/workspaces/test_supervisor" \
-        -e SUPERVISOR_NAME="hassio_supervisor" \
-        -e SUPERVISOR_DEV=1 \
-        -e SUPERVISOR_MACHINE="qemu${QEMU_ARCH}" \
-        "${SUPERVISOR_IMAGE}:latest"
 }
 
 function init_dbus() {
