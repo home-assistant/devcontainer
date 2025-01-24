@@ -81,8 +81,12 @@ function cleanup_lastboot() {
 }
 
 function cleanup_docker() {
-    echo "Cleaning up stopped containers..."
-    docker rm $(docker ps -a -q) || true
+    echo "Stopping and removing containers..."
+    containers=$(docker ps -a -q)
+    if [ -n "$containers" ]; then
+        docker stop $containers
+        docker rm $containers
+    fi
 }
 
 function init_dbus() {
@@ -130,6 +134,7 @@ function init_os_agent() {
 
     sudo os-agent &
 }
+
 
 check_bind_mount() {
     local mount_point="$1"
