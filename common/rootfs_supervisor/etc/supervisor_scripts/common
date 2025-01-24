@@ -131,3 +131,17 @@ function init_os_agent() {
     sudo os-agent &
 }
 
+check_bind_mount() {
+    local mount_point="$1"
+
+    if ! grep -q "$mount_point" /proc/mounts; then
+        echo ""
+        echo "WARNING: $mount_point is not a mount! This might cause issues for the Home"
+        echo "Assistant Core media and share folders mount propagation option. Make sure"
+        echo "to update your .devcontainer to the latest version."
+        echo ""
+        # For some tests this might be good enough, so create a directory to make things
+        # progress.
+        sudo mkdir -p "$mount_point"
+    fi
+}
