@@ -10,7 +10,7 @@ start_docker
 trap "stop_docker" ERR
 
 function run_supervisor() {
-    check_bind_mount "/mnt/supervisor"
+    validate_devcontainer "addons"
 
     docker run --rm --privileged \
         --name hassio_supervisor \
