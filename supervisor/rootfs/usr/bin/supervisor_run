@@ -31,7 +31,7 @@ function build_supervisor() {
 }
 
 function run_supervisor() {
-    sudo mkdir -p /mnt/supervisor
+    validate_devcontainer "supervisor"
 
     echo "Start Supervisor"
     docker run --rm --privileged \

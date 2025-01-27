@@ -81,8 +81,12 @@ function cleanup_lastboot() {
 }
 
 function cleanup_docker() {
-    echo "Cleaning up stopped containers..."
-    docker rm $(docker ps -a -q) || true
+    echo "Stopping and removing containers..."
+    containers=$(docker ps -a -q)
+    if [ -n "$containers" ]; then
+        docker stop $containers
+        docker rm $containers
+    fi
 }
 
 function init_dbus() {
@@ -131,3 +135,23 @@ function init_os_agent() {
     sudo os-agent &
 }
 
+
+validate_devcontainer() {
+    local devcontainer_type="$1"
+
+    if ! grep -q "$SUPERVISOR_SHARE" /proc/mounts; then
+        echo ""
+        echo "WARNING: $SUPERVISOR_SHARE is not a mount! This might cause issues for the"
+        echo "Home Assistant Core media and share folders mount propagation option. Make"
+        echo "sure to update your .devcontainer."
+        echo ""
+        if [ "$devcontainer_type" == "addons" ]; then
+            echo "You can find the template for addons here:"
+            echo "https://github.com/home-assistant/devcontainer/blob/main/addons/devcontainer.json"
+            echo ""
+        fi
+        # For some tests this might be good enough, so create a directory to make things
+        # progress.
+        sudo mkdir -p "$SUPERVISOR_SHARE"
+    fi
+}
