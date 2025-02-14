@@ -27,7 +27,6 @@ function start_systemd_journald() {
     if ! pgrep -f systemd-journal-gatewayd; then
         echo "Starting systemd-journal-gatewayd."
         sudo /usr/lib/systemd/systemd-journal-gatewayd --system 2> /dev/null &
-        sudo socat UNIX-LISTEN:/run/systemd-journal-gatewayd.sock,fork TCP:localhost:19531 2> /dev/null &
     fi
 }
 

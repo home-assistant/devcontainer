@@ -18,7 +18,6 @@ function run_supervisor() {
         --security-opt seccomp=unconfined \
         --security-opt apparmor=unconfined \
         -v /run/docker.sock:/run/docker.sock:rw \
-        -v /run/systemd-journal-gatewayd.sock:/run/systemd-journal-gatewayd.sock:rw \
         -v /run/dbus:/run/dbus:ro \
         -v /run/udev:/run/udev:ro \
         -v /mnt/supervisor:/data:rw \
@@ -28,6 +27,7 @@ function run_supervisor() {
         -e SUPERVISOR_NAME=hassio_supervisor \
         -e SUPERVISOR_DEV=1 \
         -e SUPERVISOR_MACHINE="qemu${QEMU_ARCH}" \
+        -e SUPERVISOR_SYSTEMD_JOURNAL_GATEWAYD_URL="http://172.30.32.1:19531/" \
         "${SUPERVISOR_IMAGE}:${SUPERVISOR_VERSION}"
 }
 
