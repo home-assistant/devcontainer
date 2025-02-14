@@ -6,7 +6,6 @@ VERSION_INFO=$(curl -s https://version.home-assistant.io/dev.json)
 HA_ARCH=$(get_arch ha)
 QEMU_ARCH=$(get_arch qemu)
 DOCKER_TIMEOUT=30
-DOCKER_PID=0
 SUPERVISOR_SHARE="/mnt/supervisor"
 
 export SUPERVISOR_VERSION="$(echo ${VERSION_INFO} | jq -e -r '.supervisor')"
@@ -32,8 +31,9 @@ function start_systemd_journald() {
 
 
 function start_docker() {
-    local starttime
-    local endtime
+    local start_time
+    local current_time
+    local elapsed_time
 
     if grep -q 'microsoft-standard\|standard-WSL' /proc/version; then
         # The docker daemon does not start when running WSL2 without adjusting iptables
@@ -44,49 +44,64 @@ function start_docker() {
     echo "Starting docker."
     if stat -f -c %T /var/lib/docker | grep -q overlayfs; then
         echo "Using \"vfs\" storage driver. Bind mount /var/lib/docker to use the faster overlay2 driver."
-        sudo dockerd --storage-driver=vfs 2> /dev/null &
+        storage_driver="vfs"
     else
-        sudo dockerd --storage-driver=overlay2 2> /dev/null &
+        storage_driver="overlay2"
     fi
-    DOCKER_PID=$!
+    sudo dockerd --storage-driver="${storage_driver}" > /dev/null 2>&1 &
 
-    echo "Waiting for docker to initialize..."
-    starttime="$(date +%s)"
-    endtime="$(date +%s)"
-    until docker info >/dev/null 2>&1; do
-        if [[ $((endtime - starttime)) -le $DOCKER_TIMEOUT ]]; then
-            sleep 1
-            endtime=$(date +%s)
-        else
-            echo "Timeout while waiting for docker to come up"
+    echo "Waiting for Docker to initialize..."
+    socket_path="/var/run/docker.sock"
+
+    start_time=$(date +%s)
+    while [[ ! -S "$socket_path" || ! -r "$socket_path" ]]; do
+        current_time=$(date +%s)
+        elapsed_time=$((current_time - start_time))
+
+        if [[ $elapsed_time -ge $DOCKER_TIMEOUT ]]; then
+            echo "Timeout: Docker did not start within $DOCKER_TIMEOUT seconds."
             exit 1
         fi
+
+        sleep 1
     done
+
+    # It seems that dockerd messes with the terminal somehow, carriage returns (\r)
+    # seem not to function properly. Resetting the terminal fixes this.
+    stty sane
     echo "Docker was initialized"
 }
 
 function stop_docker() {
-    local starttime
-    local endtime
+    local start_time
+    local current_time
+    local elapsed_time
 
-    echo "Stopping in container docker..."
-    if [ "$DOCKER_PID" -gt 0 ] && kill -0 "$DOCKER_PID" 2> /dev/null; then
-        starttime="$(date +%s)"
-        endtime="$(date +%s)"
+    # Check if docker pid is there
+    if [ ! -f /var/run/docker.pid ]; then
+        echo "No pid found for docker"
+        return 0
+    fi
 
-        # Now wait for it to die
-        sudo kill "$DOCKER_PID"
-        while kill -0 "$DOCKER_PID" 2> /dev/null; do
-            if [[ $((endtime - starttime)) -le $DOCKER_TIMEOUT ]]; then
-                sleep 1
-                endtime=$(date +%s)
-            else
-                echo "Timeout while waiting for container docker to die"
+    echo "Stopping Docker daemon..."
+    docker_pid=$(cat /var/run/docker.pid)
+    echo "Sending SIGTERM to docker daemon $docker_pid"
+    if sudo kill -0 "$docker_pid" 2> /dev/null; then
+        start_time="$(date +%s)"
+
+        # Now wait for it to exit
+        sudo kill "$docker_pid"
+        while sudo kill -0 "$docker_pid" 2> /dev/null; do
+            current_time=$(date +%s)
+            elapsed_time=$((current_time - start_time))
+            if [[ $elapsed_time -ge $DOCKER_TIMEOUT ]]; then
+                echo "Timeout while waiting for Docker daemon to exit"
                 exit 1
             fi
+            sleep 1
         done
     else
-        echo "Your host might have been left with unreleased resources"
+        echo "Unable to find Docker daemon process"
     fi
 }
 
