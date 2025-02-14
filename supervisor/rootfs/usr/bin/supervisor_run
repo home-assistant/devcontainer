@@ -8,6 +8,7 @@ WD="${WORKSPACE_DIRECTORY:=/workspaces/supervisor}"
 
 echo "Run Supervisor"
 
+start_systemd_journald
 start_docker
 trap "stop_docker" ERR
 
@@ -49,6 +50,7 @@ function run_supervisor() {
         -e SUPERVISOR_NAME=hassio_supervisor \
         -e SUPERVISOR_DEV=1 \
         -e SUPERVISOR_MACHINE="qemu${QEMU_ARCH}" \
+        -e SUPERVISOR_SYSTEMD_JOURNAL_GATEWAYD_URL="http://172.30.32.1:19531/" \
         "ghcr.io/home-assistant/${HA_ARCH}-hassio-supervisor:latest"
 }
 

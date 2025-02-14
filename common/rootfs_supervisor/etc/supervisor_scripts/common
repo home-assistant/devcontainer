@@ -13,6 +13,24 @@ export SUPERVISOR_VERSION="$(echo ${VERSION_INFO} | jq -e -r '.supervisor')"
 export SUPERVISOR_IMAGE="$(sed "s/{arch}/${HA_ARCH}/g" <<< "$(echo ${VERSION_INFO} | jq -e -r '.images.supervisor')")"
 
 
+function start_systemd_journald() {
+    if ! [ -e /var/log/journal ]; then
+        echo "Creating systemd-journald tmpfiles."
+        sudo systemd-tmpfiles --create --prefix /var/log/journal
+    fi
+
+    if ! pgrep -f systemd-journald; then
+        echo "Starting systemd-journald."
+        sudo /usr/lib/systemd/systemd-journald &
+    fi
+
+    if ! pgrep -f systemd-journal-gatewayd; then
+        echo "Starting systemd-journal-gatewayd."
+        sudo /usr/lib/systemd/systemd-journal-gatewayd --system 2> /dev/null &
+    fi
+}
+
+
 function start_docker() {
     local starttime
     local endtime
