@@ -7,6 +7,14 @@ ENV \
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# Uninstall pre-installed formatting and linting tools
+# They would conflict with our pinned versions
+RUN \
+    pipx uninstall pydocstyle \
+    && pipx uninstall pycodestyle \
+    && pipx uninstall mypy \
+    && pipx uninstall pylint
+
 # Install tools
 RUN \
     apt-get update \
