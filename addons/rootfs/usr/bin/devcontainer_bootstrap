@@ -4,4 +4,12 @@ set -e
 
 bash /usr/bin/supervisor_bootstrap
 
+workspace_mount="/mnt/supervisor/addons/local/$(basename "${WORKSPACE_DIRECTORY:?}")"
+if ! mountpoint -q "${workspace_mount}"; then
+    echo "WARNING: Mounting ${WORKSPACE_DIRECTORY} to ${workspace_mount}." >&2
+    echo "To avoid this warning, see https://github.com/home-assistant/devcontainer/pull/135." >&2
+    sudo mkdir -p "${workspace_mount}"
+    sudo mount --bind "${WORKSPACE_DIRECTORY}" "${workspace_mount}"
+fi
+
 exit 0
