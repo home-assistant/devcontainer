@@ -4,4 +4,8 @@ set -e
 
 bash /usr/bin/supervisor_bootstrap
 
+# The add-on directory must be within supervisor's data directory
+sudo mkdir -p /mnt/supervisor/addons/local
+sudo mount --bind "${WORKSPACE_DIRECTORY?}" /mnt/supervisor/addons/local
+
 exit 0

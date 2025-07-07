@@ -22,7 +22,6 @@ function run_supervisor() {
         -v /run/dbus:/run/dbus:ro \
         -v /run/udev:/run/udev:ro \
         -v /mnt/supervisor:/data:rw \
-        -v "$WORKSPACE_DIRECTORY":/data/addons/local:rw \
         -v /etc/machine-id:/etc/machine-id:ro \
         -e SUPERVISOR_SHARE="/mnt/supervisor" \
         -e SUPERVISOR_NAME=hassio_supervisor \
