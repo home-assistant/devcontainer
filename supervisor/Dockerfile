@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/python:1-3.13
+FROM mcr.microsoft.com/devcontainers/python:3-3.13
 
 ENV \
     DEBIAN_FRONTEND=noninteractive \
@@ -37,7 +37,6 @@ RUN \
         shellcheck \
         cosign \
         os-agent \
-        yarn \
     && usermod -aG docker vscode
 
 COPY ./supervisor/rootfs /
