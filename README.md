@@ -7,7 +7,7 @@ This project contains custom devcontainers for use in our repositories.
 
 Image | Description | Dockerfile
 -- | -- | -- 
-`ghcr.io/home-assistant/devcontainer:addons` | For Add-on development | [./addons/Dockerfile](./addons/Dockerfile)
+`ghcr.io/home-assistant/devcontainer:apps` | For Home Assistant App development | [./apps/Dockerfile](./apps/Dockerfile)
 `ghcr.io/home-assistant/devcontainer:supervisor` | For Supervisor development | [./supervisor/Dockerfile](./supervisor/Dockerfile)
 
 Versioned images are available with the custom devcontainer version prepended (e.g. `1-supervisor`). This loosly resembles what
@@ -19,18 +19,18 @@ is updated to a new Python version).
 
 Example files to use with Visual Studio Code 
 
-### addon
+### Apps
 
-Example files for the `addons` devcontainer
+Example files for the `apps` devcontainer
 
-- [Example configuration (for `.devcontainer/devcontainer.json`)](./addons/devcontainer.json)
-- [Example tasks file (for `.vscode/tasks.json`)](./addons/tasks.json)
+- [Example configuration (for `.devcontainer/devcontainer.json`)](./apps/devcontainer.json)
+- [Example tasks file (for `.vscode/tasks.json`)](./apps/tasks.json)
 
 
 
 ## Notes
 
-### `addons` and `supervisor`
+### `apps` and `supervisor`
 
 - Use the command `supervisor_run` to start Home Assistant inside the devcontainer, or run the task "Start Home Assistant" if you copied the tasks file.
 - Use `ha` to use the custom Home Assistant CLI (Needs the supervisor to be running).

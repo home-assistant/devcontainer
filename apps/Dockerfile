@@ -29,4 +29,4 @@ RUN \
         os-agent \
     && usermod -aG docker vscode
 
-COPY ./addons/rootfs /
+COPY ./apps/rootfs /
