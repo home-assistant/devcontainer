@@ -1,10 +1,10 @@
 {
-  "name": "Example devcontainer for add-on repositories",
-  "image": "ghcr.io/home-assistant/devcontainer:2-addons",
+  "name": "Example devcontainer for apps repositories",
+  "image": "ghcr.io/home-assistant/devcontainer:2-apps",
   "appPort": ["7123:8123", "7357:4357"],
   "postStartCommand": "bash devcontainer_bootstrap",
   "runArgs": ["-e", "GIT_EDITOR=code --wait", "--privileged"],
-  "workspaceFolder": "/mnt/supervisor/addons/local/${localWorkspaceFolderBasename}",
+  "workspaceFolder": "/mnt/supervisor/apps/local/${localWorkspaceFolderBasename}",
   "workspaceMount": "source=${localWorkspaceFolder},target=${containerWorkspaceFolder},type=bind,consistency=cached",
   "containerEnv": {
     "WORKSPACE_DIRECTORY": "${containerWorkspaceFolder}"

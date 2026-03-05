@@ -11,7 +11,7 @@ start_docker
 trap "stop_docker" ERR
 
 function run_supervisor() {
-    validate_devcontainer "addons"
+    validate_devcontainer "apps"
 
     docker run --rm --privileged \
         --name hassio_supervisor \
