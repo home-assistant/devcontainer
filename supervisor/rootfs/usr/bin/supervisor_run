@@ -5,6 +5,21 @@ set -e
 source /etc/supervisor_scripts/common
 
 WD="${WORKSPACE_DIRECTORY:=/workspaces/supervisor}"
+DOCKERFILE_PATH="${WD}/Dockerfile"
+SUPERVISOR_IMAGE_LOCAL="ghcr.io/home-assistant/${HA_ARCH}-hassio-supervisor:latest"
+
+function get_build_from() {
+    local build_from
+
+    build_from=$(sed -n 's/^ARG BUILD_FROM=//p' "${DOCKERFILE_PATH}" | head -n 1)
+
+    if [ -z "${build_from}" ]; then
+        echo "Unable to determine BUILD_FROM from ${DOCKERFILE_PATH}" >&2
+        exit 1
+    fi
+
+    echo "${build_from}"
+}
 
 echo "Run Supervisor"
 
@@ -13,22 +28,20 @@ start_docker
 trap "stop_docker" ERR
 
 function build_supervisor() {
-    docker pull "ghcr.io/home-assistant/${HA_ARCH}-builder:dev"
+    local base_image
+    base_image="$(get_build_from)"
+
+    docker pull "${base_image}"
     cosign verify \
           --certificate-oidc-issuer https://token.actions.githubusercontent.com \
-          --certificate-identity-regexp https://github.com/home-assistant/builder/.* \
-          "ghcr.io/home-assistant/${HA_ARCH}-builder:dev"
+          --certificate-identity-regexp https://github.com/home-assistant/docker-base/.* \
+          "${base_image}"
 
-    docker run --rm \
-        --privileged \
-        -v /run/docker.sock:/run/docker.sock \
-        -v "$(pwd):/data" \
-        "ghcr.io/home-assistant/${HA_ARCH}-builder:dev" \
-            --generic latest \
-            --target /data \
-            --test \
-            "--${HA_ARCH}" \
-            --no-cache
+    docker buildx build \
+        --load \
+        --no-cache \
+        --tag "${SUPERVISOR_IMAGE_LOCAL}" \
+        "${WD}"
 }
 
 function run_supervisor() {
@@ -51,7 +64,7 @@ function run_supervisor() {
         -e SUPERVISOR_DEV=1 \
         -e SUPERVISOR_MACHINE="qemu${QEMU_ARCH}" \
         -e SUPERVISOR_SYSTEMD_JOURNAL_GATEWAYD_URL="http://172.30.32.1:19531/" \
-        "ghcr.io/home-assistant/${HA_ARCH}-hassio-supervisor:latest"
+        "${SUPERVISOR_IMAGE_LOCAL}"
 }
 
 
