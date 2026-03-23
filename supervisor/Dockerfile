@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/python:3-3.13
+FROM mcr.microsoft.com/devcontainers/python:3-3.14
 
 ENV \
     DEBIAN_FRONTEND=noninteractive \
