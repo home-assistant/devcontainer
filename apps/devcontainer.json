@@ -1,6 +1,8 @@
 {
   "name": "Example devcontainer for apps repositories",
-  "image": "ghcr.io/home-assistant/devcontainer:2-apps",
+  "image": "ghcr.io/home-assistant/devcontainer:4-apps",
+  "overrideCommand": false,
+  "remoteUser": "vscode",
   "appPort": ["7123:8123", "7357:4357"],
   "postStartCommand": "bash devcontainer_bootstrap",
   "runArgs": ["-e", "GIT_EDITOR=code --wait", "--privileged"],
@@ -28,6 +30,8 @@
   },
   "mounts": [
     "type=volume,target=/var/lib/docker",
-    "type=volume,target=/mnt/supervisor"
+    "type=volume,target=/var/lib/containerd",
+    "type=volume,target=/mnt/supervisor",
+    "type=tmpfs,target=/tmp"
   ]
 }

@@ -23,10 +23,6 @@ function get_build_from() {
 
 echo "Run Supervisor"
 
-start_systemd_journald
-start_docker
-trap "stop_docker" ERR
-
 function build_supervisor() {
     local base_image
     base_image="$(get_build_from)"
@@ -71,22 +67,13 @@ function run_supervisor() {
 if [ "$( docker container inspect -f '{{.State.Status}}' hassio_supervisor )" == "running" ]; then
     echo "Restarting Supervisor"
     docker rm -f hassio_supervisor
-    init_dbus
-    init_udev
-    init_os_agent
     cleanup_lastboot
     run_supervisor
-    stop_docker
-
 else
     echo "Starting Supervisor"
     docker system prune -f
     build_supervisor
     cleanup_lastboot
     cleanup_docker
-    init_dbus
-    init_udev
-    init_os_agent
     run_supervisor
-    stop_docker
 fi
