@@ -2,8 +2,6 @@
 
 set -e
 
-bash /usr/bin/supervisor_bootstrap
-
 if [ ! -n "$VIRTUAL_ENV" ]; then
   if [ -x "$(command -v uv)" ]; then
     uv venv venv
