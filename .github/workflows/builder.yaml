@@ -43,7 +43,7 @@ jobs:
           echo "gitsha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: 🛠️ Build devcontainer (${{ matrix.devcontainer }})
-        uses: docker/build-push-action@v7.0.0
+        uses: docker/build-push-action@v7.1.0
         with:
           context: .
           file: ./${{ matrix.devcontainer }}/Dockerfile
