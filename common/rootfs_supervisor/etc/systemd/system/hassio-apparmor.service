@@ -1,0 +1,15 @@
+[Unit]
+Description=Hass.io AppArmor
+ConditionSecurity=apparmor
+Wants=hassio-supervisor.service
+Requires=mount-securityfs.service
+After=mount-securityfs.service
+Before=docker.service hassio-supervisor.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/sbin/hassio-apparmor
+
+[Install]
+WantedBy=multi-user.target
