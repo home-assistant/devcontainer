@@ -2,7 +2,8 @@
 
 set -e
 
-VERSION_INFO=$(curl -sf https://version.home-assistant.io/dev.json)
+SUPERVISOR_CHANNEL="${SUPERVISOR_CHANNEL:-dev}"
+VERSION_INFO=$(curl -sf "https://version.home-assistant.io/${SUPERVISOR_CHANNEL}.json")
 HA_ARCH=$(get_arch ha)
 QEMU_ARCH=$(get_arch qemu)
 SUPERVISOR_SHARE="/mnt/supervisor"
