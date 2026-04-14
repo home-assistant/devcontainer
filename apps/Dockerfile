@@ -10,6 +10,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN \
     apt-get update \
     && apt-get install -y --no-install-recommends \
+        apparmor \
         dbus-broker \
         network-manager \
         libpulse0 \
@@ -52,6 +53,8 @@ RUN systemd-tmpfiles --create --prefix /var/log/journal
 # Enable services which are otherwise disabled by default
 RUN systemctl enable \
     haos-agent \
+    hassio-apparmor \
+    mount-securityfs \
     systemd-journal-gatewayd
 
 STOPSIGNAL SIGRTMIN+3

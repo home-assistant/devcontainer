@@ -1,0 +1,13 @@
+[Unit]
+Description=Mount securityfs for AppArmor
+ConditionSecurity=apparmor
+DefaultDependencies=no
+Before=apparmor.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/bin/mount -t securityfs securityfs /sys/kernel/security
+
+[Install]
+WantedBy=sysinit.target

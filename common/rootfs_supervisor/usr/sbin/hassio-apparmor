@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -e
+
+PROFILES_DIR="/mnt/supervisor/apparmor"
+CACHE_DIR="${PROFILES_DIR}/cache"
+
+mkdir -p "${PROFILES_DIR}"
+mkdir -p "${CACHE_DIR}"
+
+# Download the hassio-supervisor profile if not present
+if [ ! -f "${PROFILES_DIR}/hassio-supervisor" ]; then
+    curl -sf https://version.home-assistant.io/apparmor_stable.txt \
+        -o "${PROFILES_DIR}/hassio-supervisor"
+fi
+
+# Load existing profiles
+for profile in "${PROFILES_DIR}"/*; do
+    if [ ! -f "${profile}" ]; then
+        continue
+    fi
+
+    if ! apparmor_parser -r -W -L "${CACHE_DIR}" "${profile}"; then
+        echo "[Error]: Can't load profile ${profile}"
+    fi
+done
