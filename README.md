@@ -35,3 +35,36 @@ Example files for the `apps` devcontainer
 - Use the command `supervisor_run` to start Home Assistant inside the devcontainer, or run the task "Start Home Assistant" if you copied the tasks file.
 - Use `ha` to use the custom Home Assistant CLI (Needs the supervisor to be running).
 
+### AppArmor
+
+If the host kernel supports AppArmor, it is automatically active inside
+the devcontainer for the Supervisor and apps. The `hassio-supervisor`
+profile is downloaded and loaded on first boot. This allows apps
+developers to develop and test AppArmor profiles within the devcontainer
+environment.
+
+AppArmor denials are logged to the kernel ring buffer and can be viewed
+with `dmesg` or `journalctl -k`. Note that `auditd` cannot run inside
+the container due to missing permissions on the host kernel's audit
+subsystem. For full audit logging, run `auditd` on the host OS directly.
+
+**Host kernel considerations:** The `apparmor` package inside the
+container ships default policies which may prohibit D-Bus communication,
+potentially interfering with the Supervisor and apps. Additionally, the
+host kernel's AppArmor feature set can lead to different behavior of
+profile enforcement. For example, Ubuntu kernels may enable AppArmor
+features that are not present on other distributions, which can affect
+how profiles are applied.
+
+To disable AppArmor for the Supervisor, set `SUPERVISOR_UNCONFINED` in
+your `containerEnv`:
+
+```json
+"containerEnv": {
+    "SUPERVISOR_UNCONFINED": "1"
+}
+```
+
+This causes the Supervisor container to run with `apparmor=unconfined`
+instead of the `hassio-supervisor` profile.
+
