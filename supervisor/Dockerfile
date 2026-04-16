@@ -16,11 +16,14 @@ RUN \
     && pipx uninstall pylint
 
 # Install tools
+# dbus-broker is the active system bus; dbus-daemon is installed only for
+# its binary, which Supervisor tests invoke directly (it ships no unit files).
 RUN \
     apt-get update \
     && apt-get install -y --no-install-recommends \
         apparmor \
         dbus-broker \
+        dbus-daemon \
         network-manager \
         libpulse0 \
         systemd-journal-remote \
