@@ -3,13 +3,14 @@ set -e
 
 PROFILES_DIR="/mnt/supervisor/apparmor"
 CACHE_DIR="${PROFILES_DIR}/cache"
+SUPERVISOR_CHANNEL="${SUPERVISOR_CHANNEL:-dev}"
 
 mkdir -p "${PROFILES_DIR}"
 mkdir -p "${CACHE_DIR}"
 
 # Download the hassio-supervisor profile if not present
 if [ ! -f "${PROFILES_DIR}/hassio-supervisor" ]; then
-    curl -sf https://version.home-assistant.io/apparmor_stable.txt \
+    curl -sf "https://version.home-assistant.io/apparmor_${SUPERVISOR_CHANNEL}.txt" \
         -o "${PROFILES_DIR}/hassio-supervisor"
 fi
 
