@@ -43,12 +43,17 @@ function build_supervisor() {
 function run_supervisor() {
     validate_devcontainer "supervisor"
 
+    local apparmor_profile="hassio-supervisor"
+    if [ -n "${SUPERVISOR_UNCONFINED}" ]; then
+        apparmor_profile="unconfined"
+    fi
+
     echo "Start Supervisor"
     docker run --rm --privileged \
         --name hassio_supervisor \
         --privileged \
         --security-opt seccomp=unconfined \
-        --security-opt apparmor=hassio-supervisor \
+        --security-opt "apparmor=${apparmor_profile}" \
         -v /run/docker.sock:/run/docker.sock:rw \
         -v /run/dbus:/run/dbus:ro \
         -v /run/supervisor:/run/os:rw \
