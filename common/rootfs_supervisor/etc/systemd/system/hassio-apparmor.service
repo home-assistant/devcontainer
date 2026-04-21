@@ -9,6 +9,7 @@ Before=docker.service hassio-supervisor.service
 [Service]
 Type=oneshot
 RemainAfterExit=true
+PassEnvironment=SUPERVISOR_CHANNEL
 ExecStart=/usr/sbin/hassio-apparmor
 
 [Install]
