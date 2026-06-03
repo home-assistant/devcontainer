@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout the repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
 
       - name: 🏗 Set up QEMU
         uses: docker/setup-qemu-action@v4.1.0
