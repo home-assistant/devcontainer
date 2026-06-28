@@ -42,6 +42,12 @@ jobs:
           echo "version=$(head -1 ./${{ matrix.devcontainer }}/version)" >> $GITHUB_OUTPUT
           echo "gitsha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
+      - name: Lowercase repository_owner
+        id: repository_owner
+        run: |
+          GH_REPOSITORY_OWNER="${{ github.repository_owner }}"
+          echo "lc_owner=${GH_REPOSITORY_OWNER,,}" >> $GITHUB_OUTPUT
+
       - name: 🛠️ Build devcontainer (${{ matrix.devcontainer }})
         uses: docker/build-push-action@v7.2.0
         with:
@@ -49,8 +55,8 @@ jobs:
           file: ./${{ matrix.devcontainer }}/Dockerfile
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ github.repository_owner }}/devcontainer:${{ steps.get-version.outputs.version }}-${{ matrix.devcontainer }}
-            ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}
-            ghcr.io/${{ github.repository_owner }}/devcontainer:${{ matrix.devcontainer }}-${{ steps.get-version.outputs.gitsha }}
+            ghcr.io/${{ steps.repository_owner.outputs.lc_owner }}/devcontainer:${{ steps.get-version.outputs.version }}-${{ matrix.devcontainer }}
+            ghcr.io/${{ steps.repository_owner.outputs.lc_owner }}/devcontainer:${{ matrix.devcontainer }}
+            ghcr.io/${{ steps.repository_owner.outputs.lc_owner }}/devcontainer:${{ matrix.devcontainer }}-${{ steps.get-version.outputs.gitsha }}
           push: ${{ github.event_name == 'push' }} 
 
