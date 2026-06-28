@@ -2,6 +2,7 @@
 
 set -e
 
+# folder changed from addons to apps in newer homeassistant versions
 workspace_mount="/mnt/supervisor/apps/local/$(basename "${WORKSPACE_DIRECTORY:?}")"
 if ! mountpoint -q "${workspace_mount}"; then
     echo "WARNING: Mounting ${WORKSPACE_DIRECTORY} to ${workspace_mount}." >&2
