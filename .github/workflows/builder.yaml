@@ -49,7 +49,7 @@ jobs:
           echo "lc_owner=${GH_REPOSITORY_OWNER,,}" >> $GITHUB_OUTPUT
 
       - name: 🛠️ Build devcontainer (${{ matrix.devcontainer }})
-        uses: docker/build-push-action@v7.2.0
+        uses: docker/build-push-action@v7.3.0
         with:
           context: .
           file: ./${{ matrix.devcontainer }}/Dockerfile
