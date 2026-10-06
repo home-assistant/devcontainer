@@ -1,0 +1,66 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+
+  "enabledManagers": ["custom.regex", "github-actions"],
+
+  "semanticCommits": "disabled",
+  "labels": ["dependencies"],
+
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "cosign installed in the devcontainers",
+      "managerFilePatterns": ["/^common/install/versions\\.json$/"],
+      "matchStrings": ["\"cosign\": \"(?<currentValue>[^\"]+)\""],
+      "depNameTemplate": "sigstore/cosign",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.+)$"
+    },
+    {
+      "customType": "regex",
+      "description": "OS Agent installed in the devcontainers",
+      "managerFilePatterns": ["/^common/install/versions\\.json$/"],
+      "matchStrings": ["\"os-agent\": \"(?<currentValue>[^\"]+)\""],
+      "depNameTemplate": "home-assistant/os-agent",
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "description": "nvm installed in the devcontainers",
+      "managerFilePatterns": ["/^common/install/versions\\.json$/"],
+      "matchStrings": ["\"nvm\": \"(?<currentValue>[^\"]+)\""],
+      "depNameTemplate": "nvm-sh/nvm",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.+)$"
+    }
+  ],
+
+  "packageRules": [
+    {
+      "description": "Label GitHub Actions updates like Dependabot did",
+      "matchManagers": ["github-actions"],
+      "addLabels": ["github_actions"]
+    },
+    {
+      "description": "The docker/* actions move together in the build workflow. They came in as 25 separate PRs this year.",
+      "matchPackageNames": ["docker/**"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "Docker actions",
+      "groupSlug": "docker-actions"
+    },
+    {
+      "description": "Leave runner labels and action version inputs alone, Dependabot never updated those",
+      "matchManagers": ["github-actions"],
+      "matchDepTypes": ["github-runner", "uses-with"],
+      "enabled": false
+    },
+    {
+      "description": "Our own actions that follow a branch (like home-assistant/actions@master) float on purpose. Pinning them would open a digest PR in every repository for each change to them. Our own actions on a version tag are pinned like any other.",
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["home-assistant/**"],
+      "matchCurrentValue": "/^(dev|main|master)$/",
+      "pinDigests": false
+    }
+  ]
+}
